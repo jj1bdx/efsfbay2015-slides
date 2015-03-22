@@ -145,27 +145,62 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 ---
 
-# Xorshift*/Xorshift+ algorithms
+# Xorshift*/+ algorithms
 
 * Marsaglia's [Xorshift](http://www.jstatsoft.org/v08/i14/), output scrambled by [the algorithm of Sebastiano Vigna](http://xorshift.di.unimi.it/) for the best result against [TestU01](http://www.iro.umontreal.ca/~simardr/testu01/tu01.html)
 * Xorshift64\*, Xorshift128+, Xorshift1024\* are the most practical three choices
+* C code in public domain
 * Deceptively simple
 
 ---
 
-# Xorshift64* in Erlang
+# Xorshift64*
 
 ```erlang
 % See https://github.com/jj1bdx/exs64
 -type uint64() :: 0..16#ffffffffffffffff.
 -opaque state() :: uint64().
 -define(UINT64MASK, 16#ffffffffffffffff).
-
 -spec next(state()) -> {uint64(), state()}.
-
 next(R) ->
-R1 = R bxor (R bsr 12),
-R2 = R1 bxor ((R1 bsl 25) band ?UINT64MASK),
-R3 = R2 bxor (R2 bsr 27),
-   {(R3 * 2685821657736338717) band ?UINT64MASK, R3}.
+    R1 = R bxor (R bsr 12),
+    R2 = R1 bxor ((R1 bsl 25) band ?UINT64MASK),
+    R3 = R2 bxor (R2 bsr 27),
+    {(R3 * 2685821657736338717) band ?UINT64MASK, R3}.
+```
+
+---
+
+# Xorshift1024* (1/2)
+
+```erlang
+% See https://github.com/jj1bdx/exs1024
+-type uint64() :: 0..16#ffffffffffffffff.
+-opaque seedval() :: list(uint64()). % 16 64-bit integers
+-opaque state() :: {list(uint64()), list(uint64())}.
+-define(UINT64MASK, 16#ffffffffffffffff).
+%% calc(S0, S1) -> {X, NS1} / X: random number output
+-spec calc(uint64(), uint64()) -> {uint64(), uint64()}.
+calc(S0, S1) ->
+    S11 = S1 bxor ((S1 bsl 31) band ?UINT64MASK),
+    S12 = S11 bxor (S11 bsr 11),
+    S01 = S0 bxor (S0 bsr 30),
+    NS1 = S01 bxor S12,
+    {(NS1 * 1181783497276652981) band ?UINT64MASK, NS1}.
+```
+
+---
+
+# Xorshift1024* (2/2)
+
+```erlang
+-spec next(state()) -> {uint64(), state()}.
+% with a ring buffer using a pair of lists
+next({[H], RL}) ->
+    next({[H|lists:reverse(RL)], []});
+next({L, RL}) ->
+    [S0|L2] = L,
+    [S1|L3] = L2,
+    {X, NS1} = calc(S0, S1),
+    {X, {[NS1|L3], [S0|RL]}}.
 ```
