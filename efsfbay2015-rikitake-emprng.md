@@ -289,7 +289,7 @@ next({L, RL}) ->
 
 # Future directions
 
-* Keep promoting to ban/ditch/whatever the good-old `random` module and use `something else which is much better` (try exs64)
+* Keep promoting to ban/ditch/whatever the good-old `random` module and use *something else which is much better* (try [exs64](https://github.com/jj1bdx/exs64))
 * Merge emprng to OTP: more algorithms, user-supplied functions, tests
 * Performance implication analysis needed on large-scale applications
 
