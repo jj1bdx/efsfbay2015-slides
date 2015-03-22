@@ -137,18 +137,38 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 # Other Erlang PRNGs
 
-* [sfmt-erlang](https://github.com/jj1bdx/sfmt-erlang) ([SFMT](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/), (2^(19937))-1, 32-bit)
-* [tinymt-erlang](https://github.com/jj1bdx/tinymt-erlang) ([TinyMT](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/index.html), (2^127)-1, ~2^56 orthogonal sequences, 32-bit)
-* [exs64](https://github.com/jj1bdx/exs64) ([XorShift*64](http://xorshift.di.unimi.it/), (2^64)-1, 64-bit)
-* [exsplus](https://github.com/jj1bdx/exsplus) ([Xorshift+128](http://xorshift.di.unimi.it/), (2^128)-1, 64-bit)
-* [exs1024](https://github.com/jj1bdx/exs1024) ([Xorshift*1024](http://xorshift.di.unimi.it/), (2^1024)-1, 64-bit)
+* [sfmt-erlang](https://github.com/jj1bdx/sfmt-erlang) ([SFMT](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/), 2^19937-1, 32-bit)
+* [tinymt-erlang](https://github.com/jj1bdx/tinymt-erlang) ([TinyMT](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/index.html), 2^127-1, ~2^56 orthogonal sequences, 32-bit)
+* [exs64](https://github.com/jj1bdx/exs64) ([XorShift*64](http://xorshift.di.unimi.it/), 2^64-1, 64-bit)
+* [exsplus](https://github.com/jj1bdx/exsplus) ([Xorshift+128](http://xorshift.di.unimi.it/), 2^128-1, 64-bit)
+* [exs1024](https://github.com/jj1bdx/exs1024) ([Xorshift*1024](http://xorshift.di.unimi.it/), 2^1024-1, 64-bit)
+
+---
+
+# SFMT
+
+* Mersenne Twister: default PRNG on Python, MATLAB, C++11, R, etc.
+* Internal state: 624 32-bit integers (2496 bytes)
+* SIMD-oriented Fast Mersenne Twister (SFMT) = MT improved
+* Extremely long period (2^19937-1, longer variants available)
+* On Erlang: NIF and non-NIF versions available
+
+---
+
+# TinyMT
+
+* Tiny Mersenne Twister for restricted resources
+* Shorter but sufficient period (2^127-1)
+* 127-bit state + three 32-bit words for the polynomial parameters
+* ~2^56 choice of orthogonal polynomials, suitable for parallelism
+* On Erlang: non-NIF implementation (NIF tested but abandoned)
 
 ---
 
 # Xorshift*/+ algorithms
 
-* Marsaglia's [Xorshift](http://www.jstatsoft.org/v08/i14/), output scrambled by [the algorithm of Sebastiano Vigna](http://xorshift.di.unimi.it/) for the best result against [TestU01](http://www.iro.umontreal.ca/~simardr/testu01/tu01.html)
-* Xorshift64\*, Xorshift128+, Xorshift1024\* are the most practical three choices
+* Marsaglia's [Xorshift](http://www.jstatsoft.org/v08/i14/), output scrambled by [the algorithm of Sebastiano Vigna](http://xorshift.di.unimi.it/) for the best result against [TestU01](http://www.iro.umontreal.ca/~simardr/testu01/tu01.html) strength test
+* Xorshift64\*, Xorshift128+, Xorshift1024\* are so far the most practical three choices
 * C code in public domain
 * Deceptively simple
 
@@ -204,3 +224,28 @@ next({L, RL}) ->
     {X, NS1} = calc(S0, S1),
     {X, {[NS1|L3], [S0|RL]}}.
 ```
+
+---
+
+# NIF implications (1/2)
+
+sfmt-erlang gains a lot by NIFs because:
+
+* It needs bulk state initialization (624 x 32-bit)
+* NIFnizing it makes ~16 times faster on FreeBSD 10.1-STABLE, Core i5-3427U (2.3GHz, 8 HTs), Erlang/OTP 17.4.1, clang
+* Execution time: ~1600 -> ~15 microseconds
+* Reductions: 1569 -> 4 (`process_info/2`)
+
+---
+
+# NIF implications (2/2)
+
+tinymt-erlang did not gain much from NIFs presumably because:
+
+* Bulk initialization is not applicable
+* State calculation complexity is small
+* Calling overhead of Erlang functions takes most of execution time
+* sfmt-erlang in NIFs was *faster* for generating a large set of numbers
+
+---
+
