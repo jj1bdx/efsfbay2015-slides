@@ -13,7 +13,7 @@ San Francisco, CA, USA
 
 ---
 
-# Japanese books (1)
+# LYSE in Japanese
 
 * [LYSE in Japanese](http://estore.ohmsha.co.jp/titles/978427406
 912P)
@@ -23,7 +23,7 @@ San Francisco, CA, USA
 
 ---
 
-# Japanese books (2)
+# Joe's book in Japanese
 
 * [Programming Erlang 1st ed in Japanese](http://estore.ohmsha.co.jp/titles/978427406714P)
 * Reference translation
@@ -32,9 +32,9 @@ San Francisco, CA, USA
 
 ---
 
-# Japanese article
+# Japanese magazine article
 
-* I've just started a monthly series on **Software Design**
+* I've just started a monthly series on **Software Design** about Erlang/OTP and concurrent programming
 
 ![right](software-design-201504.jpg)
 
@@ -51,20 +51,10 @@ And many other occasional gatherings such as:
 
 ---
 
-# People
-
-* [@voluntas](https://twitter.com/voluntas/)
-* [@kuenishi](https://twitter.com/kuenishi/)
-* [@ajiyoshi](https://twitter.com/ajiyoshi/)
-
-And quite a few other people
-
----
-
 # Notable users
 
-* [Shiguredo](http://shiguredo.jp/): specialized in MQTT, WebRTC, and many others
-* [Dwango's case study](http://kbkz.connpass.com/event/5288/): video distribution system for non-PC terminals
+* [Shiguredo](http://shiguredo.jp/): specialized in MQTT, WebRTC, and other advanced technologies
+* [Dwango's case study](http://kbkz.connpass.com/event/5288/): massive video distribution system for non-PC terminals
 * [VOYAGE GROUP's case study](http://www.slideshare.net/ajiyoshi/real-world-erlang): real-time bidding system
 * [LeoFS](http://leo-project.net/leofs/): distributed storage
 * [Basho Japan](http://basho.co.jp/), and Riak / Riak CS users
@@ -73,22 +63,20 @@ And quite a few other people
 
 # Mirror site in Japan
 
-* [erlang-users.jp](http://erlang-users.jp/)
+* [erlang-users.jp](http://erlang-users.jp/): providing a mirror site of Erlang/OTP distributions in Japan
 
 ---
 
-# Issues
-
-* Notable people are all too busy to form or maintain large sustainable communities
-* ~70% of Japanese in Tokyo/Kansai claim they only speak Japanese ([Source by Hakuhodo](http://seikatsusoken.jp/teiten2014/answer/762.html))
-* Only ~1.4% of Japanese in Tokyo/Kansai claim they can negotiate complex issues in English([Source by Hakuhodo] (http://seikatsusoken.jp/teiten2014/answer/747.html))
-
----
-
-# Conclusions and blatant advertisement
+# Summary
 
 * Erlang/OTP and Elixir has been gaining the popularity in Japan, slowly but surely
-* If you have difficulties working with Japanese IT engineers, contact me!
-* Specialized in Erlang/OTP, FreeBSD, computer security, and the Internet industry
-* I speak (American) English and Japanese
+* More Japanese good documents and reference materials are still heavily in need (Japanese engineers have severe difficulties in reading/listening to English)
+
+---
+
+# Sponsored advertisement
+
+* If you have difficulties working with Japanese IT engineers, contact **Kenji Rikitake Professional Engineer's Office!**
+* Projects done: English-to-Japanese web security document translation, HTML5+CSS3+jQuery web site design
+* Interested in Erlang/OTP, FreeBSD, computer security, and the Internet industry
 
