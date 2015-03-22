@@ -155,6 +155,17 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 ---
 
+# sfmt-erlang: on NIFs
+
+sfmt-erlang gains a lot by NIFs because:
+
+* It needs bulk state initialization (624 x 32-bit)
+* NIFnizing it makes ~16 times faster on FreeBSD 10.1-STABLE, Core i5-3427U (2.3GHz, 8 HTs), Erlang/OTP 17.4.1, clang
+* Execution time: ~1600 -> ~15 microseconds
+* Reductions: 1569 -> 4 (`process_info/2`)
+
+---
+
 # TinyMT
 
 * Tiny Mersenne Twister for restricted resources
@@ -162,6 +173,26 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 * 127-bit state + three 32-bit words for the polynomial parameters
 * ~2^56 choice of orthogonal polynomials, suitable for parallelism
 * On Erlang: non-NIF implementation (NIF tested but abandoned)
+
+---
+
+# tinymt-erlang: on NIFs
+
+tinymt-erlang did not gain much from NIFs presumably because:
+
+* Bulk initialization is not applicable
+* State calculation complexity is small
+* Calling overhead of Erlang functions takes most of execution time
+* sfmt-erlang in NIFs was *faster* for generating a large set of numbers
+
+---
+
+# So are NIFs effective?
+
+* Not really, unless processing a bulk generation/computation
+* Remember NIFs *block* the scheduler
+* If NIFs are not needed, don't use them
+* If NIFs are really needed, tuning the scheduler is *inevitable* - ask the gurus for the details
 
 ---
 
@@ -227,25 +258,27 @@ next({L, RL}) ->
 
 ---
 
-# NIF implications (1/2)
+# Suggested purposes for the alternative PRNGs
 
-sfmt-erlang gains a lot by NIFs because:
-
-* It needs bulk state initialization (624 x 32-bit)
-* NIFnizing it makes ~16 times faster on FreeBSD 10.1-STABLE, Core i5-3427U (2.3GHz, 8 HTs), Erlang/OTP 17.4.1, clang
-* Execution time: ~1600 -> ~15 microseconds
-* Reductions: 1569 -> 4 (`process_info/2`)
-
----
-
-# NIF implications (2/2)
-
-tinymt-erlang did not gain much from NIFs presumably because:
-
-* Bulk initialization is not applicable
-* State calculation complexity is small
-* Calling overhead of Erlang functions takes most of execution time
-* sfmt-erlang in NIFs was *faster* for generating a large set of numbers
+* sfmt-erlang: proven, can be chosen in [ProPer](http://proper.softlab.ntua.gr/)
+* tinymt-erlang: proven, has ~268 million polynomial parameters available at [tinymtdc-longbatch](https://github.com/jj1bdx/tinymtdc-longbatch)
+* exs64: replacement of AS183
+* exsplus: an alternative to exs64
+* exs1024: good choice for simulation
 
 ---
 
+# Merging to OTP (1/2)
+
+* Dan Gudmundsson (of OTP Team) offered me to help writing a multi-algorithm successor of `random` module
+* exs64/plus/1024: MIT license of mine
+* sfmt-erlang/tinymt-erlang: BSD license
+* All algorithms had to be relicensed in *Erlang Public License* to be included in OTP
+
+---
+
+# Merging to OTP (2/2)
+
+* It was expected to be called as new `random`, but the OTP team didn't want it (presumably due to backward compatibility issues), so it's called `rand`
+* Project name: [emprng](https://github.com/jj1bdx/emprng)
+* `random`-compatible functions available for the six algorithms: as183, exs64 (default), exsplus, exs1024, sfmt, tinymt
