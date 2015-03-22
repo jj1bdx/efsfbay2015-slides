@@ -135,13 +135,37 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 ---
 
-# Other Erlang PRNG implementations
+# Other Erlang PRNGs
 
-* These are much better than `random`
-* [SFMT](https://github.com/jj1bdx/sfmt-erlang) (Period: (2^(19937))-1)
-* [TinyMT](https://github.com/jj1bdx/tinymt-erlang) (Period: (2^127)-1, ~2^56 sequences)
-* [XorShift64*](https://github.com/jj1bdx/exs64) (Period: (2^64)-1)
-* [XorShift128+](https://github.com/jj1bdx/exsplus) (Period: (2^128)-1)
-* [XorShift1024*](https://github.com/jj1bdx/exs1024) (Period: (2^1024)-1)
+* [sfmt-erlang](https://github.com/jj1bdx/sfmt-erlang) ([SFMT](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/), (2^(19937))-1, 32-bit)
+* [tinymt-erlang](https://github.com/jj1bdx/tinymt-erlang) ([TinyMT](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/index.html), (2^127)-1, ~2^56 orthogonal sequences, 32-bit)
+* [exs64](https://github.com/jj1bdx/exs64) ([XorShift*64](http://xorshift.di.unimi.it/), (2^64)-1, 64-bit)
+* [exsplus](https://github.com/jj1bdx/exsplus) ([Xorshift+128](http://xorshift.di.unimi.it/), (2^128)-1, 64-bit)
+* [exs1024](https://github.com/jj1bdx/exs1024) ([Xorshift*1024](http://xorshift.di.unimi.it/), (2^1024)-1, 64-bit)
 
 ---
+
+# Xorshift*/Xorshift+ algorithms
+
+* Marsaglia's [Xorshift](http://www.jstatsoft.org/v08/i14/), output scrambled by [the algorithm of Sebastiano Vigna](http://xorshift.di.unimi.it/) for the best result against [TestU01](http://www.iro.umontreal.ca/~simardr/testu01/tu01.html)
+* Xorshift64\*, Xorshift128+, Xorshift1024\* are the most practical three choices
+* Deceptively simple
+
+---
+
+# Xorshift64* in Erlang
+
+```erlang
+% See https://github.com/jj1bdx/exs64
+-type uint64() :: 0..16#ffffffffffffffff.
+-opaque state() :: uint64().
+-define(UINT64MASK, 16#ffffffffffffffff).
+
+-spec next(state()) -> {uint64(), state()}.
+
+next(R) ->
+R1 = R bxor (R bsr 12),
+R2 = R1 bxor ((R1 bsl 25) band ?UINT64MASK),
+R3 = R2 bxor (R2 bsr 27),
+   {(R3 * 2685821657736338717) band ?UINT64MASK, R3}.
+```
