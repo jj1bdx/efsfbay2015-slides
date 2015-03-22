@@ -30,21 +30,21 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 # PRNGs matter
 
-* This is my second talk on pseudo random number generators in Erlang Factory events
-* First in 2011
-* People are *still using* the good-old `random` module, designed in 1980s, and already *fully exploited*
-* So I proposed to do this again with new algorithms, and accepted
+* This is my third talk on pseudo random number generators in Erlang Factory events, first on 2011
+* And four years later: eople are *still using* the good-old `random` module, designed in 1980s, and already *fully exploited*: **don't.**
+* So I decided to do the talk again with new algorithms, and the talk is accepted
 
 ---
 
 # PRNGs are everywhere
 
 * Rolling dice (for games)
-* (Property) testing
+* (Property) testing (QuickCheck, ProPer, Triq)
 * Variation analysis of electronic circuits
-* Network congestion and delay tolerance analysis
+* Network congestion and delay analysis
 * Risk analysis of project schedules
 * Passwords (*Secure PRNGs* only!)
+* Generating noise
 
 ---
 
@@ -68,12 +68,15 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 # How PRNG works
 
-* Give a seed S1
-* `{Result1, S2} = prng(S1)`
-* `{Result2, S3} = prng(S2)`
-* ... and on and on
 * Sequential iterative process
 * Need to choose seeds carefully to prevent sequence overlapping on multiple processes
+
+```erlang
+% Give a seed S1
+{Result1, S2} = prng(S1),
+{Result2, S3} = prng(S2),
+% ... and on and on
+```
 
 ---
 
@@ -81,18 +84,17 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 * For password and cryptographic key generation with strong security
 * Use `crypto:strong_rand_bytes/1`
-* Entropy gathering takes time
+* Remember entropy gathering takes time
 * This is *cryptography* - use and *only use* proven algorithms! *Do not invent yours!*
 
 ---
 
 # In this talk: non-secure PRNGs
 
-* May be *Vulnerable to cryptographic attacks*
+* May be *vulnerable to cryptographic attacks*
 * (Uniform) distribution guaranteed
-* *Predictive* sequences
-* Same seed, same result
-* Lots of seed choices
+* *Predictive*: same seed = same result
+* Lots of seed (internal state) choices
 * Long period: no intelligible patterns
 
 ---
@@ -129,9 +131,9 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 # Erlang `random`'s problem
 
+* The algorithm AS183 is too old (designed in 1980s for 16-bit computers)
 * Period: 6953607871644 ~= 2^(42.661), too short for modern computer exploits
 * Fully exploited in < 9 hours on Core i5 (single core) ([my C source](https://github.com/jj1bdx/as183-c)) - Richard O'Keefe told me this was *nothing new in either academic and engineering perspectives* (he is right!)
-* The algorithm AS183 is too old (designed in 1980s for 16-bit computers)
 
 ---
 
@@ -271,9 +273,9 @@ next({L, RL}) ->
 # Merging to OTP (1/2)
 
 * Dan Gudmundsson (of OTP Team) offered me to help writing a multi-algorithm successor of `random` module
-* exs64/plus/1024: MIT license of mine
-* sfmt-erlang/tinymt-erlang: BSD license
-* All algorithms had to be relicensed in *Erlang Public License* to be included in OTP
+* exs64/plus/1024: MIT licensed (by me)
+* sfmt-erlang/tinymt-erlang: BSD licensed
+* All pieces of code had to be relicensed in *Erlang Public License* to be included in OTP
 
 ---
 
@@ -281,4 +283,16 @@ next({L, RL}) ->
 
 * It was expected to be called as new `random`, but the OTP team didn't want it (presumably due to backward compatibility issues), so it's called `rand`
 * Project name: [emprng](https://github.com/jj1bdx/emprng)
-* `random`-compatible functions available for the six algorithms: as183, exs64 (default), exsplus, exs1024, sfmt, tinymt
+* `random`-compatible functions currently available for the six algorithms: as183, exs64 (default), exsplus, exs1024, sfmt, tinymt
+
+---
+
+# Future directions
+
+* Keep promoting to ban/ditch/whatever the good-old `random` module and use `something else which is much better` (try exs64)
+* Merge emprng to OTP: more algorithms, user-supplied functions, tests
+* Performance implication analysis needed on large-scale applications
+
+---
+
+# Thanks<br><br>Questions?
