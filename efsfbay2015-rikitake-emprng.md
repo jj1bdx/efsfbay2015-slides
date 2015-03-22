@@ -31,7 +31,7 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 # PRNGs matter
 
 * This is my third talk on pseudo random number generators in Erlang Factory events, first on 2011
-* And four years later: eople are *still using* the good-old `random` module, designed in 1980s, and already *fully exploited*: **don't.**
+* And four years later, people are *still using* the good-old `random` module, designed in 1980s, and already *fully exploited*: **don't.**
 * So I decided to do the talk again with new algorithms, and the talk is accepted
 
 ---
@@ -289,9 +289,9 @@ next({L, RL}) ->
 
 # Future directions
 
-* Keep promoting to ban/ditch/whatever the good-old `random` module and use *something else which is much better* (try [exs64](https://github.com/jj1bdx/exs64))
+* Keep promoting banning/deprecating the good-old `random` module and use *something else that is much better* (try [exs64](https://github.com/jj1bdx/exs64))
 * Merge emprng to OTP: more algorithms, user-supplied functions, tests
-* Performance implication analysis needed on large-scale applications
+* Analyze performance implication on large-scale applications
 
 ---
 
