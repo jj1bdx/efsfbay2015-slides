@@ -113,8 +113,7 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 # Other PRNG failures
 
-* [Cryptocat's JavaScript in 2013](https://nakedsecurity.sophos.com/2013/07/09/anatomy-of-a-pseudorandom-number-generator-visualising-cryptocats-buggy-prng/)
-* Left: OK, right: BAD
+* [Cryptocat 2013](https://nakedsecurity.sophos.com/2013/07/09/anatomy-of-a-pseudorandom-number-generator-visualising-cryptocats-buggy-prng/) (blue: OK, red: bad)
 
 ![inline](colourmap-urandom-4801.png) ![inline](colourmap-mod251-4801.png)
 
@@ -131,19 +130,18 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 # Erlang `random`'s problem
 
 * Period: 6953607871644 ~= 2^(42.661), too short for modern computer exploits
-* Fully exploited in < 9 hours on Core i5 ([my C source](https://github.com/jj1bdx/as183-c)) - Richard O'Keefe told me this was *nothing new in either academic and engineering perspectives* (he is right!)
+* Fully exploited in < 9 hours on Core i5 (single core) ([my C source](https://github.com/jj1bdx/as183-c)) - Richard O'Keefe told me this was *nothing new in either academic and engineering perspectives* (he is right!)
 * The algorithm AS183 is too old (designed in 1980s for 16-bit computers)
 
 ---
 
-# Other PRNGs on Erlang
+# Other Erlang PRNG implementations
 
 * These are much better than `random`
 * [SFMT](https://github.com/jj1bdx/sfmt-erlang) (Period: (2^(19937))-1)
 * [TinyMT](https://github.com/jj1bdx/tinymt-erlang) (Period: (2^127)-1, ~2^56 sequences)
-* [XorShift*64](https://github.com/jj1bdx/exs64) (Period: (2^64)-1)
-* [XorShift+128](https://github.com/jj1bdx/exsplus) (Period: (2^128)-1)
-* [XorShift*1024](https://github.com/jj1bdx/exs1024) (Period: (2^1024)-1)
+* [XorShift64*](https://github.com/jj1bdx/exs64) (Period: (2^64)-1)
+* [XorShift128+](https://github.com/jj1bdx/exsplus) (Period: (2^128)-1)
+* [XorShift1024*](https://github.com/jj1bdx/exs1024) (Period: (2^1024)-1)
 
 ---
-
