@@ -162,9 +162,11 @@ Erlang Factory SF Bay 2010-2015 speaker (for *six* consecutive years!)
 sfmt-erlang gains a lot by NIFs because:
 
 * It needs bulk state initialization (624 x 32-bit)
-* NIFnizing it makes ~16 times faster on FreeBSD 10.1-STABLE, Core i5-3427U (2.3GHz, 8 HTs), Erlang/OTP 17.4.1, clang
-* Execution time: ~1600 -> ~15 microseconds
-* Reductions: 1569 -> 4 (`process_info/2`)
+* NIFnizing it makes total execution time ~16 times faster (on FreeBSD, OTP 17.4.1)
+* Execution time of state initialization: ~100 times faster (~1600 -> ~15 microseconds)
+
+^ Reductions: 1569 -> 4 (`process_info/2`)
+^ FreeBSD 10.1-STABLE, Core i5-3427U (2.3GHz, 8 HTs), Erlang/OTP 17.4.1, clang
 
 ---
 
