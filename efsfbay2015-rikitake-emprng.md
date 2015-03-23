@@ -18,7 +18,7 @@ Professional Internet Engineer
 
 ACM Erlang Workshop 2011 Workshop Chair
 
-Ex Digital Equipment Corporation and Basho Technologies engineer
+Erlang Factory SF Bay 2010-2015 speaker (for *six* consecutive years!)
 
 ![right, fit](kenji-standing-20150209-small.jpg)
 
@@ -30,8 +30,8 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 # PRNGs matter
 
-* This is my third talk on pseudo random number generators in Erlang Factory events, first on 2011
-* And four years later, people are *still using* the good-old `random` module, designed in 1980s, and already *fully exploited*: **don't.**
+* The first talk of pseudo random number generators in Erlang Factory events was on 2011
+* Now four years later, people are *still using* the good-old `random` module, already *fully exploited*. **We should stop using it!**
 * So I decided to do the talk again with new algorithms, and the talk is accepted
 
 ---
@@ -69,7 +69,7 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 # How PRNG works
 
 * Sequential iterative process
-* Need to choose seeds carefully to prevent sequence overlapping on multiple processes
+* For multiple processes, seeds and other parameters should be chosen carefully to prevent sequence overlapping
 
 ```erlang
 % Give a seed S1
@@ -99,7 +99,7 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 ---
 
-# Non-secure PRNG failures
+# Even non-secure PRNGs fail
 
 * Found from the observable patterns by making a graphical representation
 * *Very short period* of showing up the same number sequence again
@@ -137,7 +137,7 @@ Ex Digital Equipment Corporation and Basho Technologies engineer
 
 ---
 
-# Other Erlang PRNGs
+# Alternative Erlang PRNGs
 
 * [sfmt-erlang](https://github.com/jj1bdx/sfmt-erlang) ([SFMT](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/), 2^19937-1, 32-bit)
 * [tinymt-erlang](https://github.com/jj1bdx/tinymt-erlang) ([TinyMT](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/TINYMT/index.html), 2^127-1, ~2^56 orthogonal sequences, 32-bit)
@@ -257,6 +257,16 @@ next({L, RL}) ->
     {X, NS1} = calc(S0, S1),
     {X, {[NS1|L3], [S0|RL]}}.
 ```
+
+---
+
+# Performance implications
+
+* HiPE highly recommended
+* Handling full 64-bit numbers means handling BIGNUMs and slow; short integers are up to (2^59)
+* `exs64`: < x2 execution time of `random`
+* `exs1024`: slower, but ~ x2 of `random`
+* Speed penalty: worth being paid for
 
 ---
 
