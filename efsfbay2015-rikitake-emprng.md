@@ -176,7 +176,7 @@ sfmt-erlang gains a lot by NIFs because:
 * Shorter but sufficient period (2^127-1)
 * 127-bit state + three 32-bit words for the polynomial parameters
 * ~2^56 choice of orthogonal polynomials, suitable for parallelism
-* On Erlang: non-NIF implementation (NIF tested but abandoned)
+* On Erlang: non-NIF only
 
 ---
 
@@ -184,10 +184,9 @@ sfmt-erlang gains a lot by NIFs because:
 
 tinymt-erlang did not gain much from NIFs presumably because:
 
-* Bulk initialization is not applicable
-* State calculation complexity is small
-* Calling overhead of Erlang functions takes most of execution time
-* sfmt-erlang in NIFs was *faster* for generating a large set of numbers
+* No bulk initialization, state calculation complexity is small
+* Most of execution time: function calling overhead
+* In NIFs, sfmt-erlang was *faster* for generating a large sequence
 
 ---
 
