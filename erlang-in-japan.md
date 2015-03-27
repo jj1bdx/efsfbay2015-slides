@@ -77,7 +77,7 @@ And many other occasional gatherings such as:
 # Sponsored advertisement
 
 * If you have difficulties working with Japanese IT engineers, contact **Kenji Rikitake Professional Engineer's Office!**
-* Projects done: English-to-Japanese web security document translation, HTML5+CSS3+jQuery web site design
-* Interested in Erlang/OTP, FreeBSD, Riak
+* Projects done: Japanese-to-English web security document translation, HTML5+CSS3+jQuery web site design
+* Interested in Erlang/OTP, FreeBSD, distributed systems
 * Experienced in computer security and the Internet industry
 
